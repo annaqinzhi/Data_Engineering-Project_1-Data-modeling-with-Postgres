@@ -85,4 +85,3 @@ Extract, transform, load (ETL) is the general procedure of copying data from one
 4. run ``test.ipynb`` in the jupyter notebook, to check if the records inserted into each table without error
 
 
-
