@@ -46,7 +46,7 @@ an example of what the data in a log file, 2018-11-12-events.json, looks like
 
 ## Star schema for Song Play Analysis
 
-![starSchema file](assets/starSchema.jpg)
+![starSchema file](assets/starSchema.JPG)
 
 ### Fact Table
 
