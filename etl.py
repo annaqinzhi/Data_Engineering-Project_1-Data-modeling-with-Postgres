@@ -6,6 +6,16 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Description:This function can be used to read the file in the filepath (data/song_data) to get the songs and artists info and used to populate the songs and artists tables.
+
+    Arguments:
+    cur: the cursor object. 
+    filepath: song data file path. 
+
+    Returns: None     
+    """
+        
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -13,12 +23,23 @@ def process_song_file(cur, filepath):
     song_data = df[['song_id', 'title', 'artist_id', 'year', 'duration']].values[0].tolist()
     cur.execute(song_table_insert, song_data)
     
+    
     # insert artist record
     artist_data = df[['artist_id', 'artist_name', 'artist_location', 'artist_latitude', 'artist_longitude']].values[0].tolist()
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
+    """
+    Description: This function can be used to read the file in the filepath (data/log_data) to get the users and times info and used to populate the users and time tables.
+
+    Arguments:
+    cur: the cursor object. 
+    filepath: log data file path. 
+
+    Returns: None   
+    """ 
+
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -56,11 +77,22 @@ def process_log_file(cur, filepath):
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = (index, pd.to_datetime(row.ts, unit='ms'), row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
+        songplay_data = (pd.to_datetime(row.ts, unit='ms'), row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
         cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Description: This function can be used to transfer all the matching files into related tables. 
+
+    Arguments:
+    cur: the cursor object. 
+    filepath: data file path (data/song_data or data/log_data). 
+    func: the functions which defined above (process_song_file or process_log_file).
+
+    Returns:None
+    """
+
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -80,6 +112,14 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Description: This function is the entry point to start the execution of the program.
+
+    Arguments: None
+
+    Returns: None
+    """
+
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
